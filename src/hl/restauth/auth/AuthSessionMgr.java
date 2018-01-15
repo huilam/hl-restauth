@@ -26,6 +26,7 @@ public class AuthSessionMgr {
 	private LoadingCache<String, String> cacheAuthSession = null;
 	private Map<String, List<String>> mapUIDAuth = null;
 	private int iMaxSessionAllows = 1;
+	private long lSessionMaxLifeSpanMins = 1440;
 	
 	private static String _SESSION 						= "session";
 	private static String _SESSION_TIMEOUT_SECS 		= "timeout.secs";
@@ -41,6 +42,13 @@ public class AuthSessionMgr {
 		
 		long lTimeoutInSecs = 300; //5 min
 		
+		if(jsonConfig.has(_SESSION_MAX_LIFESPAN_MINS))
+		{
+			lSessionMaxLifeSpanMins = jsonConfig.getLong(_SESSION_MAX_LIFESPAN_MINS);
+			if(lSessionMaxLifeSpanMins<=0)
+				lSessionMaxLifeSpanMins = 1440; //24 hours
+		}
+
 		if(jsonConfig.has(_SESSION_TIMEOUT_SECS))
 		{
 			lTimeoutInSecs = jsonConfig.getLong(_SESSION_TIMEOUT_SECS);
