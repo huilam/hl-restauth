@@ -3,6 +3,9 @@ package hl.restauth.accessctrl;
 import java.io.IOException;
 import java.util.Map;
 
+import org.json.JSONObject;
+import hl.restauth.JsonAuth;
+
 public class AccessMgr {
 
 	private final static String VERSION 	= "0.1.0";
@@ -30,24 +33,30 @@ public class AccessMgr {
 		return VERSION;
 	}
 	
-	public boolean isConsumerAllow(String aEndpoint, String aHttpMethod, JsonAccessEntity aJsonEntity)
+	public boolean isConsumerAllow(String aEndpoint, String aHttpMethod, JsonAuth aJsonAuth)
 	{
 		Map<String, String[]> map = accessConfig.getConsumerAccPolicies(aEndpoint, aHttpMethod);
-		return isAccessAllowed(map, aJsonEntity);
+		return isAccessAllowed(map, aJsonAuth.getConsumer());
 	}
 	
-	public boolean isProviderAllow(String aEndpoint, String aHttpMethod, JsonAccessEntity aJsonEntity)
+	public boolean isProviderAllow(String aEndpoint, String aHttpMethod, JsonAuth aJsonAuth)
 	{
 		Map<String, String[]> map = accessConfig.getProviderAccPolicies(aEndpoint);
-		return isAccessAllowed(map, aJsonEntity);
+		return isAccessAllowed(map, aJsonAuth.getProvider());
 	}
 	
-	private boolean isAccessAllowed(Map<String, String[]> aMapAccessPolicies, JsonAccessEntity aAccessCandidate)
+	private boolean isAccessAllowed(Map<String, String[]> aMapAccessPolicies, JSONObject aJsonAccessCandidate)
 	{
 		boolean isAllowAccess = false;
 		
+		if(aJsonAccessCandidate==null || aJsonAccessCandidate.toString().trim().length()<=2)
+			return false;
+		
 		if(aMapAccessPolicies==null)
-			return isAllowAccess;
+			return false;
+		
+		System.out.println(" ? isAccessAllowed : "+aJsonAccessCandidate.toString());
+		
 		
 		for(String sAccessPolicy : aMapAccessPolicies.keySet())
 		{
@@ -56,11 +65,15 @@ public class AccessMgr {
 			{
 				String sAccessRule 				= sAccessPolicy.substring(iPos+1);
 				String[] sAccessConfigValues 	= sAccessRule.split(accessConfig.getMultiValSeparator());
+				//
 				if(sAccessConfigValues!=null && sAccessConfigValues.length>0)
 				{
 					for(String sAccessType : sAccessConfigValues)
 					{
-						String sCandidateVals = aAccessCandidate.getAttribute(sAccessType);
+						if(!aJsonAccessCandidate.has(sAccessType))
+							continue;
+							
+						String sCandidateVals = aJsonAccessCandidate.getString(sAccessType);
 						if(sCandidateVals==null)
 							continue;
 						
@@ -68,12 +81,17 @@ public class AccessMgr {
 						if(sConfigVals==null)
 							continue;
 						
+System.out.println("	- AccessPolicy='"+sAccessPolicy+"' : '"+String.join(",", sConfigVals)+"'");			
+						
+System.out.println("	- Comparing '"+sCandidateVals+"' ...");			
+
 						String[] sCandidateValues = sCandidateVals.split(accessConfig.getMultiValSeparator());
 						for(String sReqVal : sCandidateValues)
 						{
 							boolean isMatch = false;
 							for(String sConfigVal : sConfigVals)
 							{
+System.out.print("  		- Matching '"+sReqVal+"' with config'"+sConfigVal+"' ... ");
 								if(sConfigVal.equalsIgnoreCase(accessConfig.getAccessPolicyWildcard()))
 								{
 									// match any
@@ -92,6 +110,8 @@ public class AccessMgr {
 										isMatch = sReqVal.equals(sConfigVal);
 									}
 								}
+								
+								System.out.println(isMatch);	
 								
 								if(isMatch)
 								{
@@ -113,25 +133,31 @@ public class AccessMgr {
     public static void main(String args[]) throws Exception 
     {
     	AccessMgr mgr = new AccessMgr();
-    	JsonAccessEntity jsonEntity = new JsonAccessEntity();
-    	jsonEntity.put(AccessConfig._CFG_IP, "127.0.0.1");
-    	jsonEntity.put(AccessConfig._CFG_ROLE, "admin,poweruser");
-    	jsonEntity.put(AccessConfig._CFG_UID, "onghuilam");
+    	JsonAuth jsonAuth = new JsonAuth();
+    	jsonAuth.setProviderIP("127.0.0.1");
+    	
+    	jsonAuth.setConsumerIP("127.0.0.1");
+    	jsonAuth.setConsumerRoles("admin,poweruser");
+    	jsonAuth.setConsumerUID("onghuilam");
     	
     	String sURL = "/alerts";
     	String sHttpMethod = "";
     	
     	sHttpMethod = "GET";
-    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonEntity));
+    	System.out.println();
+    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonAuth));
     	
     	sHttpMethod = "POST";
-    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonEntity));
+    	System.out.println();
+    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonAuth));
     	
     	sHttpMethod = "PUT";
-    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonEntity));
+    	System.out.println();
+    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonAuth));
     	
     	sHttpMethod = "DELETE";
-    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonEntity));
+    	System.out.println();
+    	System.out.println(sHttpMethod+" "+sURL+" : "+mgr.isConsumerAllow(sURL, sHttpMethod, jsonAuth));
     	
     	
     }

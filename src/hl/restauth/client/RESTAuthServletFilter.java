@@ -10,9 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONObject;
-
-import hl.restauth.accessctrl.AccessConfig;
+import hl.restauth.AuthUtil;
+import hl.restauth.JsonAuth;
 import hl.restauth.auth.JsonUser;
 
 public class RESTAuthServletFilter implements Filter {
@@ -20,7 +19,6 @@ public class RESTAuthServletFilter implements Filter {
 	@Override
 	public void destroy() {
 		// nothing to destroy
-		
 	}
 
 	@Override
@@ -29,14 +27,14 @@ public class RESTAuthServletFilter implements Filter {
 		
 		HttpServletRequest httpReq = (HttpServletRequest) req;
 		
-		JSONObject json = new JSONObject();
-		json.put(JsonUser._UID, httpReq.getHeader(JsonUser._UID));
-		json.put(JsonUser._AUTHTOKEN, httpReq.getHeader(JsonUser._AUTHTOKEN));
+		JsonAuth json = new JsonAuth();
+		json.setConsumerUID(httpReq.getHeader(JsonUser._UID));
+		json.setConsumerAuthToken(httpReq.getHeader(JsonUser._AUTHTOKEN));
+		json.setConsumerIP(AuthUtil.getClientIP(httpReq));
 		//
-		json.put(AccessConfig._CFG_ENDPOINT_URL, httpReq.getPathInfo());
-		json.put(AccessConfig._CFG_HTTP_METHOD, httpReq.getMethod());
-		json.put(AccessConfig._CFG_IP, httpReq.getRemoteAddr());
-
+		json.setResourceEndpointURL(httpReq.getPathInfo());
+		json.setResourceHttpMethod(httpReq.getMethod());
+		//
 		System.out.println("["+RESTAuthServletFilter.class.getName()+"]"+json.toString());
 		chain.doFilter(httpReq, resp);
 	}
