@@ -18,6 +18,22 @@ public class AuthUtil {
 	
 	
     /////////////////////////////////////////////////////////////////
+	public static boolean isValidIP(String aIP)
+	{
+		if(aIP.indexOf(":")>-1)
+		{
+			if(pattIPv6.matcher(aIP).find())
+			{
+				return true;
+			}
+		}
+		else if(pattIPv4.matcher(aIP).find())
+		{
+			return true;
+		}
+		return false;
+	}
+	
     public static String getClientIP(HttpServletRequest aHttpReq)
     {
     	String sClientIP = aHttpReq.getRemoteAddr();
@@ -39,16 +55,9 @@ public class AuthUtil {
     			for(String sHeaderName : rproxies_clientip_headers)
     	    	{
     				String sHeaderValue = aHttpReq.getHeader(sHeaderName);
-    				if(sHeaderValue!=null)
+    				if(sHeaderValue!=null && isValidIP(sHeaderValue))
     				{
-    					if(pattIPv4.matcher(sHeaderValue).find())
-    					{
-    						return sHeaderValue;
-    					}
-    					else if(pattIPv6.matcher(sHeaderValue).find())
-        				{
-    						return sHeaderValue;
-        				}
+    					return sHeaderValue;
     				}
     	    	}
     			

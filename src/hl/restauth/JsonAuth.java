@@ -1,4 +1,6 @@
 package hl.restauth;
+import java.io.IOException;
+
 import org.json.JSONObject;
 
 import hl.restauth.accessctrl.AccessConfig;
@@ -158,25 +160,34 @@ public class JsonAuth extends JSONObject{
 		return getConsumerAttr(_ROLES);
 	}
 	
-	public void setConsumerIP(Object aObject)
+	public void setConsumerIP(String aObject) throws IOException
 	{
-		setConsumerAttr(_IP, aObject);
+		if(AuthUtil.isValidIP(aObject))
+		{
+			setConsumerAttr(_IP, aObject);
+		}
+		throw new IOException("Invalid IP format - "+aObject);
 	}
 	
-	public void setConsumerAuthToken(Object aObject)
+	public void setConsumerAuthToken(String aObject)
 	{
 		setConsumerAttr(_AUTHTOKEN, aObject);
 	}
 	
-	public void setConsumerUID(Object aObject)
+	public void setConsumerUID(String aObject)
 	{
 		setConsumerAttr(_UID, aObject);
 	}
 	
-	public void setConsumerRoles(Object aObject)
+	public void setConsumerRoles(String aObject)
 	{
 		setConsumerAttr(_ROLES, aObject);
-	}		
+	}
+	
+	public void setConsumerRoles(String[] aObject)
+	{
+		setConsumerAttr(_ROLES, String.join(",", aObject));
+	}
 	//----------------------------
 	
 	public String getProviderIP()
@@ -195,28 +206,32 @@ public class JsonAuth extends JSONObject{
 	}
 	
 	//
-	public void setProviderIP(Object aObject)
+	public void setProviderIP(String aObject) throws IOException
 	{
-		setProviderAttr(_IP, aObject);
+		if(AuthUtil.isValidIP(aObject))
+		{
+			setProviderAttr(_IP, aObject);
+		}
+		throw new IOException("Invalid IP format - "+aObject);
 	}
 	
-	public void setProviderUID(Object aObject)
+	public void setProviderUID(String aObject)
 	{
 		setProviderAttr(_UID, aObject);
 	}
 	
-	public void setProviderRoles(Object aObject)
+	public void setProviderRoles(String aObject)
 	{
 		setProviderAttr(_ROLES, aObject);
 	}
 	//
 	
-	public void setResourceEndpointURL(Object aObject)
+	public void setResourceEndpointURL(String aObject)
 	{
 		setResourceAttr(_ENDPOINT_URL, aObject);
 	}
 	
-	public void setResourceHttpMethod(Object aObject)
+	public void setResourceHttpMethod(String aObject)
 	{
 		setResourceAttr(_HTTP_METHOD, aObject);
 	}
