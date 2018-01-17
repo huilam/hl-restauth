@@ -167,7 +167,8 @@ public class JsonAuth extends JSONObject{
 		{
 			setConsumerAttr(_IP, aObject);
 		}
-		throw new IOException("Invalid IP format - "+aObject);
+		else
+			throw new IOException("Invalid IP format - "+aObject);
 	}
 	
 	public void setConsumerAuthToken(String aObject)
@@ -225,7 +226,8 @@ public class JsonAuth extends JSONObject{
 		{
 			setProviderAttr(_IP, aObject);
 		}
-		throw new IOException("Invalid IP format - "+aObject);
+		else
+			throw new IOException("Invalid IP format - "+aObject);
 	}
 	
 	public void setProviderUID(String aObject)
