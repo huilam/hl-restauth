@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import hl.restauth.JsonAuth;
+import hl.restauth.auth.AuthMgr;
+import hl.restauth.auth.JsonUser;
 
 public class AccessMgr {
 
@@ -35,6 +37,13 @@ public class AccessMgr {
 	
 	public boolean isConsumerAllow(String aEndpoint, String aHttpMethod, JsonAuth aJsonAuth)
 	{
+		if(aJsonAuth.getConsumerRoles()==null)
+		{
+			String sUid = aJsonAuth.getConsumerUID();
+			JsonUser jsonUser = AuthMgr.getUser(sUid);
+			aJsonAuth.setConsumerRoles(jsonUser.getUserRoles());
+		}
+		
 		Map<String, String[]> map = accessConfig.getConsumerAccPolicies(aEndpoint, aHttpMethod);
 		return isAccessAllowed(map, aJsonAuth.getConsumer());
 	}
