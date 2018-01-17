@@ -33,7 +33,20 @@ public class JsonAuth extends JSONObject{
 	
 	public JsonAuth(String aJsonString)
 	{
-		super(aJsonString);
+		JSONObject json = new JSONObject(aJsonString);
+		if(json.has(_PROVIDER))
+		{
+			jsonProvider = json.getJSONObject(_PROVIDER);
+		}
+		if(json.has(_CONSUMER))
+		{
+			jsonConsumer = json.getJSONObject(_CONSUMER);
+		}
+		if(json.has(_RESOURCE))
+		{
+			jsonResource = json.getJSONObject(_RESOURCE);
+		}
+		init();
 	}
 	//
 	private void init()
@@ -41,20 +54,21 @@ public class JsonAuth extends JSONObject{
 		if(jsonConsumer==null)
 		{
 			jsonConsumer = new JSONObject();
-			jsonConsumer.put(_AUTH_INDENTITY, _CONSUMER);
 		}
 		
 		if(jsonProvider==null)
 		{
 			jsonProvider = new JSONObject();
-			jsonProvider.put(_AUTH_INDENTITY, _PROVIDER);
 		}
 		
 		if(jsonResource==null)
 		{
 			jsonResource = new JSONObject();
-			jsonResource.put(_AUTH_INDENTITY, _RESOURCE);
 		}
+		
+		jsonProvider.put(_AUTH_INDENTITY, _PROVIDER);
+		jsonConsumer.put(_AUTH_INDENTITY, _CONSUMER);
+		jsonResource.put(_AUTH_INDENTITY, _RESOURCE);
 		
 		put(_PROVIDER, jsonProvider);
 		put(_CONSUMER, jsonConsumer);
@@ -116,7 +130,12 @@ public class JsonAuth extends JSONObject{
 	public JSONObject getProvider()
 	{
 		return jsonProvider;
-	}	
+	}
+	
+	public JSONObject getResource()
+	{
+		return jsonResource;
+	}		
 	//
 	
 	public String getConsumerIP()

@@ -14,7 +14,7 @@ import hl.restauth.AuthUtil;
 import hl.restauth.JsonAuth;
 import hl.restauth.auth.JsonUser;
 
-public class RESTAuthServletFilter implements Filter {
+public class BaseAuthServletFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -35,13 +35,18 @@ public class RESTAuthServletFilter implements Filter {
 		json.setResourceEndpointURL(httpReq.getPathInfo());
 		json.setResourceHttpMethod(httpReq.getMethod());
 		//
-		System.out.println("["+RESTAuthServletFilter.class.getName()+"]"+json.toString());
-		chain.doFilter(httpReq, resp);
+		
+		processJsonAuth(json, req, resp, chain);
 	}
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// nothing to init
-		
+	}
+	
+	public void processJsonAuth(JsonAuth aJsonAuth, ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException
+	{
+		System.out.println("["+BaseAuthServletFilter.class.getName()+"]"+aJsonAuth.toString());
+		chain.doFilter(req, resp);
 	}
 }
