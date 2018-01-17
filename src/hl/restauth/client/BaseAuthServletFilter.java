@@ -15,6 +15,8 @@ import hl.restauth.JsonAuth;
 import hl.restauth.auth.JsonUser;
 
 public class BaseAuthServletFilter implements Filter {
+	
+	protected FilterConfig filterConfig = null;
 
 	@Override
 	public void destroy() {
@@ -40,8 +42,8 @@ public class BaseAuthServletFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		// nothing to init
+	public void init(FilterConfig aFilterConfig) throws ServletException {
+		this.filterConfig = aFilterConfig;
 	}
 	
 	public void processJsonAuth(JsonAuth aJsonAuth, ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException
