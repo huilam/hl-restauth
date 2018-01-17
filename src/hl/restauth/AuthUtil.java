@@ -13,8 +13,8 @@ public class AuthUtil {
 	private static String[] rproxies_ip 				= null;
 	private static String[] rproxies_clientip_headers 	= null;	
 	
-	private static Pattern pattIPv4 = Pattern.compile("[0-9\\.]{7,15}"); //255.255.255.0
-	private static Pattern pattIPv6 = Pattern.compile("[0-9a-fA-F:%]{7,42}"); //::::::: AAFF:0000:0000:0000:0000:0000:0000:aaff%99
+	private static Pattern pattIPv4 = Pattern.compile("(:?[0-9]{1,3}\\.){3}[0-9]{1,3}"); //255.255.255.0 , 127.0.0.1
+	private static Pattern pattIPv6 = Pattern.compile("(:?[0-9a-fA-F]{0,2}:){7}[0-9a-fA-F]{0,2}"); //::::::: AAFF:0000:0000:0000:0000:0000:0000:aaff%99
 	
 	
     /////////////////////////////////////////////////////////////////
@@ -76,5 +76,15 @@ public class AuthUtil {
 			sValues = sValuesString.trim().split(",");
 		}
 		return sValues;
-    }    
+    }
+    
+    public static void main(String args[]) throws Exception
+    {
+    	String[] sIPs = new String[]{"127.0.0.1","255.255.255.0","0.0.0.0","AAFF:0000:0000:0000:0000:0000:0000:aaff%99",":::::::"};
+    	
+    	for(String sIP : sIPs)
+    	{
+        	System.out.println(sIP+":"+AuthUtil.isValidIP("127.0.0.1"));
+    	}
+    }
 }

@@ -1,6 +1,7 @@
 package hl.restauth;
 import java.io.IOException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import hl.restauth.accessctrl.AccessConfig;
@@ -187,6 +188,18 @@ public class JsonAuth extends JSONObject{
 	public void setConsumerRoles(String[] aObject)
 	{
 		setConsumerAttr(_ROLES, String.join(",", aObject));
+	}
+	
+	public void setConsumerRoles(JSONArray aObject)
+	{
+		StringBuffer sb = new StringBuffer();
+		for(int i=0; i<aObject.length(); i++)
+		{
+			if(sb.length()>0)
+				sb.append(",");
+			sb.append(aObject.getString(i));
+		}
+		setConsumerAttr(_ROLES, sb.toString());
 	}
 	//----------------------------
 	
