@@ -44,9 +44,16 @@ public class FaceAuth {
 			
 			File f = new File(sCompareTargetTemplatePath);
 			
-			for(File fileJpg : f.listFiles())
+			if(!f.exists())
 			{
-				convertAllJpgToBase64(fileJpg);
+				//try to look into same folder
+				File folder = f.getParentFile();
+				
+				convertAllJpgToBase64(folder);
+				for(File fileJpg : folder.listFiles())
+				{
+					convertAllJpgToBase64(fileJpg);
+				}
 			}
 			
 			if(f.isDirectory())
