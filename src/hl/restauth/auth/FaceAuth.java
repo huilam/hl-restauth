@@ -44,6 +44,11 @@ public class FaceAuth {
 			
 			File f = new File(sCompareTargetTemplatePath);
 			
+			for(File fileJpg : f.listFiles())
+			{
+				convertAllJpgToBase64(fileJpg);
+			}
+			
 			if(f.isDirectory())
 			{
 				for(File fileFace : f.listFiles())
@@ -262,4 +267,51 @@ public class FaceAuth {
 			
     	return null;
     }
+    
+    private static void convertAllJpgToBase64(File f)
+    {
+    	if(f!=null && f.isDirectory())
+    	{
+	    	for(File fileJpg : f.listFiles())
+			{
+				String sFileName = fileJpg.getName();
+				if(sFileName.toLowerCase().endsWith(".jpg") && (sFileName.indexOf(".base64.")==-1))
+				{
+					int iPos = sFileName.lastIndexOf('.');
+					if(iPos>-1)
+					{
+						String sExt = sFileName.substring(iPos+1);
+						String sFileNameNoExt = sFileName.substring(0, iPos);
+						
+						String sJpgBase64FileName = fileJpg.getParent()+File.separatorChar+sFileNameNoExt+".base64";
+						File fileJpgBase64 = new File(sJpgBase64FileName);
+						if(!fileJpgBase64.exists())
+						{
+							String sJpgBase64 = null;
+							try {
+								sJpgBase64 = ImgUtil.imageFileToBase64(fileJpg.getAbsolutePath(), "JPEG");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							try {
+								if(sJpgBase64!=null)
+								{
+									ImgUtil.writeBase64ToFile(fileJpgBase64, sJpgBase64);
+								}
+								
+								String sRenameJpg = sJpgBase64FileName +".jpg";
+								fileJpg.renameTo(new File(sRenameJpg));
+								
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			} 
+    	}
+    }
+    
 }
