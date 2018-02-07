@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import hl.common.PropUtil;
+import hl.restauth.auth.AuthConfig;
 
 
 public class AccessConfig {
@@ -124,9 +125,14 @@ public class AccessConfig {
 		return mapPolicies;
 	}
 	
-	public void init() throws IOException
+	public void init() 
 	{
-		propAll = PropUtil.loadProperties(_PROP_FILENAME);
+		try {
+			propAll = PropUtil.loadProperties(_PROP_FILENAME);
+		} catch (IOException e) {
+			System.err.println(e);
+			propAll = new Properties();
+		}
 		mapConfig.clear();
 		propEndpointCfgMapping.clear();
 		
@@ -141,6 +147,4 @@ public class AccessConfig {
 			}
 		}
 	}
-	
-	
 }

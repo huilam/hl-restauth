@@ -330,7 +330,7 @@ public class AuthMgr {
     	}
     }
     
-    public void reinit() throws Exception
+    public void reinit() throws IOException, LdapException, SQLException
     {
     	cleanUp();
     	authConfig.init();

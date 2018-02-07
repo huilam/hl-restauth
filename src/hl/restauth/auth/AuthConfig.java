@@ -173,7 +173,7 @@ public class AuthConfig {
 		return propAll.getProperty(aPropKey);
 	}
 	
-	public void init() throws IOException
+	public void init()
 	{
 		propFileInfo.clear();
 		propLdapInfo.clear();
@@ -182,8 +182,13 @@ public class AuthConfig {
 		mapUserbase.clear();
 		propAuthSettingsInfo.clear();
 		
-		propAll = PropUtil.loadProperties(_PROP_FILENAME);
-		
+		try {
+			propAll = PropUtil.loadProperties(_PROP_FILENAME);
+		} catch (IOException e) {
+			System.err.println(e);
+			propAll = new Properties();
+		}
+
 		Iterator iter = propAll.keySet().iterator();
 		while(iter.hasNext())
 		{
@@ -246,6 +251,4 @@ public class AuthConfig {
 			}
 		}
 	}
-	
-	
 }

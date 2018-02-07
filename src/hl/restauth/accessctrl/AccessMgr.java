@@ -17,14 +17,10 @@ public class AccessMgr {
 	public AccessMgr()
 	{
 		accessConfig = AccessConfig.getInstance();
-		try {
-			reinit();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		reinit();
 	}
 	
-	public void reinit() throws IOException
+	public void reinit() 
 	{
 		accessConfig.init();
 	}
