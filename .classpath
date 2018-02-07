@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="lib/guava-22.0.jar"/>
 	<classpathentry kind="lib" path="lib/exclude/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/redis/jedis-jedis-2.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/hl-common_20180117-2219-53.jar"/>
+	<classpathentry kind="lib" path="lib/hl-common_20180207-0924-52.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
