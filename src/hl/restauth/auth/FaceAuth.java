@@ -30,6 +30,11 @@ public class FaceAuth {
     	{
     		aUserAttemptPwd = sAttemptFaceFeature;
     	}
+    	else
+    	{
+    		//no feature to compare
+    		return null;
+    	}
 		
 		List<String> listCompareTargetDataPaths = new ArrayList<String>();
 		
@@ -81,7 +86,13 @@ public class FaceAuth {
 			if(!isMatched)
 			{
 				
-				String sTargetFeature0 = getFaceFeature(sCompareTargetPath, aJsonConfig, false);
+				String sTargetFeature0 = null;
+				
+				try {
+					sTargetFeature0 = getFaceFeature(sCompareTargetPath, aJsonConfig, false);
+				} catch (IOException e1) {
+					sTargetFeature0 = null;
+				}
 				
 				String[] sCompareTargetDatas = new String[] {sTargetFeature0, null};
 				
@@ -103,10 +114,19 @@ public class FaceAuth {
 	    				
 	    				try {
 	    					long lStartTime = System.currentTimeMillis();
-							HttpResp httpReq = RestApiUtil.httpPost(sCompareRestApiUrl, sCompareContentType, sContentBody);
+							HttpResp httpReq = null;
+							
+							try {
+								httpReq = RestApiUtil.httpPost(sCompareRestApiUrl, sCompareContentType, sContentBody);
+							}catch(IOException ex)
+							{
+								ex.printStackTrace(System.err);
+							}
+							
 							long lElapsedTime = System.currentTimeMillis()-lStartTime;
 							
-							if(httpReq.getHttp_status()>=200 && httpReq.getHttp_status()<=299)
+							//success
+							if(httpReq!=null && httpReq.getHttp_status()>=200 && httpReq.getHttp_status()<=299)
 							{
 								JSONObject json = new JSONObject(httpReq.getContent_data());
 								double iCompareResultScore 	= json.getDouble(AuthConfig._FACEAPI_COMPARE_RESULT_SCORE);
@@ -137,12 +157,20 @@ public class FaceAuth {
 								if(isMatched)
 									break;
 							}
+							else
+							{
+								//not success call
+								System.out.println("[WARNING] Non-success RestApi call from "+sCompareRestApiUrl+" :"
+								+"\ncontent-type:"+sCompareContentType
+								+"\nbody:"+sContentBody
+								+"\nresponse:"+httpReq);
+							}
 							
 		    				if(isRetryWIthFlippedImage)
 		    				{
 		    					isHFlipped = true;	
 		    					String sTargetFeature1 = getFaceFeature(sCompareTargetPath, aJsonConfig, true);
-		    					if(sTargetFeature1==null)
+		    					if(sTargetFeature1!=null)
 		    					{
 		    						sCompareTargetDatas[1] = sTargetFeature1;
 		    					}
@@ -246,12 +274,19 @@ public class FaceAuth {
     	
 		String sExtractContentBody = sExtractContentTemplate.replaceAll(
 				AuthMgr.RegexEscapedParam(AuthMgr.KEY_PASSWORD), aImgBase64);
-		try {
+		
 			long lStartTime = System.currentTimeMillis();
-			HttpResp httpReq = RestApiUtil.httpPost(sExtractRestApiUrl, sExtractContentType, sExtractContentBody);
+			HttpResp httpReq = null;
+			
+			try {
+				httpReq = RestApiUtil.httpPost(sExtractRestApiUrl, sExtractContentType, sExtractContentBody);
+			} catch (IOException e) {
+				e.printStackTrace(System.err);
+			}
+			
 			long lElapsedTime = System.currentTimeMillis()-lStartTime;
 
-			if(httpReq.getHttp_status()>=200 && httpReq.getHttp_status()<=299)
+			if(httpReq!=null && httpReq.getHttp_status()>=200 && httpReq.getHttp_status()<=299)
 			{
 				String sData = httpReq.getContent_data().trim();
 				System.out.println(" [extract-feature] "+lElapsedTime+"ms : "+sData);
@@ -267,11 +302,14 @@ public class FaceAuth {
 					return sData;
 				
 			}
-		}catch(Exception ex)
-		{
-			System.err.println(ex.getMessage());
-		}
-			
+			else
+			{
+				//not success call
+				System.out.println("[WARNING] Non-success RestApi call from "+sExtractRestApiUrl+" :"
+				+"\ncontent-type:"+sExtractContentType
+				+"\nbody:"+sExtractContentBody
+				+"\nresponse:"+httpReq);
+			}
     	return null;
     }
     

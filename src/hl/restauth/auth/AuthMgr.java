@@ -277,7 +277,9 @@ public class AuthMgr {
 	    			{
 	    				
 	    				JSONObject jsonFaceAuthConfig = authConfig.getFaceAuthConfig(jsonUser.getAuthType());
-	    				jsonUser = new FaceAuth().faceMatching(jsonUser, sUserAttempPwd, jsonFaceAuthConfig);	    				
+	    				
+	    				FaceAuth faceAuth = new FaceAuth();
+	    				jsonUser = faceAuth.faceMatching(jsonUser, sUserAttempPwd, jsonFaceAuthConfig);	    				
 	    			}
 	    		}
     		}
