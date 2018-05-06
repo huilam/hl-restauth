@@ -52,12 +52,38 @@ public class JDBCMgr extends DBMgr implements IUserBase {
 			else
 			{
 				String sJson = listUsers.get(0);
-				sJson = sJson.replaceAll(AuthConfig._JDBC_DB_COL_UID, JsonUser._UID);
-				sJson = sJson.replaceAll(AuthConfig._JDBC_DB_COL_NAME, JsonUser._NAME);
-				sJson = sJson.replaceAll(AuthConfig._JDBC_DB_COL_PASS, JsonUser._PASSWORD);
-				sJson = sJson.replaceAll(AuthConfig._JDBC_DB_COL_ROLES, JsonUser._ROLES);
-				sJson = sJson.replaceAll(AuthConfig._JDBC_DB_COL_AUTH, JsonUser._AUTHTYPE);
+				
+				sJson = sJson.replaceAll(
+						jsonConfig.getString(AuthConfig._JDBC_DB_COL_UID), JsonUser._UID);
+				
+				sJson = sJson.replaceAll(
+						jsonConfig.getString(AuthConfig._JDBC_DB_COL_NAME), JsonUser._NAME);
+				
+				if(jsonConfig.has(AuthConfig._JDBC_DB_COL_PASS))
+				{
+					sJson = sJson.replaceAll(
+							jsonConfig.getString(AuthConfig._JDBC_DB_COL_PASS), JsonUser._PASSWORD);
+				}				
+				if(jsonConfig.has(AuthConfig._JDBC_DB_COL_ROLES))
+				{
+					sJson = sJson.replaceAll(
+							jsonConfig.getString(AuthConfig._JDBC_DB_COL_ROLES), JsonUser._ROLES);
+				}				
+				if(jsonConfig.has(AuthConfig._JDBC_DB_COL_AUTH))
+				{
+					sJson = sJson.replaceAll(
+							jsonConfig.getString(AuthConfig._JDBC_DB_COL_AUTH), JsonUser._AUTHTYPE);
+				}
 				JSONObject json = new JSONObject(sJson);
+				
+				if(json.has(JsonUser._UID))
+				{
+					if(aUserID.equals(json.getString(JsonUser._UID)))
+					{
+						jsonUser = new JsonUser();
+						jsonUser.setUserID(aUserID);
+					}
+				}
 				
 				String sName 	= json.getString(JsonUser._NAME);
 				String sRoles 	= json.getString(JsonUser._ROLES);

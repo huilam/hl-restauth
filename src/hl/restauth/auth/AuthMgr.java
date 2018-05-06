@@ -150,6 +150,7 @@ public class AuthMgr {
 							, jsonJdbc.getString(AuthConfig._JDBC_PWD)
 							);
 				} catch (Exception e) {
+					e.printStackTrace();
 					return null;
 				}
 			}catch(JSONException ex){}
@@ -163,12 +164,15 @@ public class AuthMgr {
 				sb.append(" SELECT * FROM ").append(jsonJdbc.getString(AuthConfig._JDBC_DB_TABLE));
 				String sWhereCause = null;				
 				try{
-					sWhereCause = jsonJdbc.getString(AuthConfig._JDBC_DB_OPT_WHERE_CAUSE);
-				}catch(JSONException ex){}
+					if(jsonJdbc.has(AuthConfig._JDBC_DB_OPT_WHERE_CAUSE))
+					{
+						sWhereCause = jsonJdbc.getString(AuthConfig._JDBC_DB_OPT_WHERE_CAUSE);
+					}
+				}catch(JSONException ex){ ex.printStackTrace(); }
 				if(sWhereCause==null)
 					sWhereCause = "1=1";
 				sb.append(" WHERE ").append(sWhereCause);
-				sb.append(" AND ").append(jsonJdbc.getString(AuthConfig._JDBC_UID)).append(" = ? ");
+				sb.append(" AND ").append(jsonJdbc.getString(AuthConfig._JDBC_DB_COL_UID)).append(" = ? ");
 				
 				jdbcMgr.addSQLtemplates("AuthMgr.getUserInfo", sb.toString());
 				
@@ -376,6 +380,7 @@ public class AuthMgr {
     	JSONObject jsonLogin = null;
     	AuthMgr authMgr = new AuthMgr();
 
+    	/**
     	testUid = "poweruser";
     	jsonLogin = authMgr.authenticate(testUid, "p0weruser");
     	System.out.println("[prop] "+testUid+" : "+(jsonLogin!=null?jsonLogin.toString():"login failed!"));
@@ -392,8 +397,12 @@ public class AuthMgr {
     	jsonLogin = authMgr.authenticate(testUid, image);
     	System.out.println("[face] "+testUid+" : "+(jsonLogin!=null?jsonLogin.toString():"login failed!"));
 
+    	**/
     	
-    	
+    	testUid = "test";
+    	jsonLogin = authMgr.authenticate(testUid, "test");
+    	System.out.println("[prop] "+testUid+" : "+(jsonLogin!=null?jsonLogin.toString():"login failed!"));
+
     	authMgr.cleanUp();
     }
 }

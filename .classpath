@@ -10,10 +10,10 @@
 	<classpathentry kind="lib" path="lib/guava-22.0.jar"/>
 	<classpathentry kind="lib" path="lib/exclude/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/redis/jedis-jedis-2.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/hl-common_20180207-0924-52.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-api-all-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-mina-core-2.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="lib/hl-common_20180506-2307-37.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
