@@ -35,7 +35,7 @@ public class AuthMgr {
 	public final static String ENCYPT_PREFIX 		= "{obfc}";
 	//
 	
-	private final static String VERSION = "0.3.6";
+	private final static String VERSION = "0.4.0";
 	//
 	
 
