@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import hl.restauth.auth.AuthConfig;
 import hl.restauth.auth.JsonUser;
-import hl.common.DBMgr;
+import hl.common.db.DBMgr;
 
 public class JDBCMgr extends DBMgr implements IUserBase {
 
