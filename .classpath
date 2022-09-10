@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
@@ -14,6 +15,6 @@
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-mina-core-2.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-slf4j-api-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/hl-common_20180506-2307-37.jar"/>
+	<classpathentry kind="lib" path="lib/hl-common_jdk11_20220907-1541-49.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
