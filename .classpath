@@ -7,14 +7,13 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/org.json.jar"/>
-	<classpathentry kind="lib" path="lib/guava-22.0.jar"/>
 	<classpathentry kind="lib" path="lib/exclude/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/redis/jedis-jedis-2.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-api-all-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-commons-collections-3.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-mina-core-2.0.16.jar"/>
-	<classpathentry kind="lib" path="lib/apache-ldap-1.0.0/apache-ldap-slf4j-api-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/hl-common_jdk11_20220907-1541-49.jar"/>
+	<classpathentry kind="lib" path="lib/apache-ldap-2.1.7/api-all-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/apache-ldap-2.1.7/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/apache-ldap-2.1.7/mina-core-2.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/apache-ldap-2.1.7/slf4j-api-1.7.36.jar"/>
+	<classpathentry kind="lib" path="lib/guava-33.4.8-jre.jar"/>
+	<classpathentry kind="lib" path="lib/hl-common_jdk17_20250428-1009-09.jar"/>
+	<classpathentry kind="lib" path="lib/json-20250107.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

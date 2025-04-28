@@ -193,7 +193,7 @@ public class JsonUser extends JSONObject{
 		return sAttrVal;
 	}
 	
-	public long getNumber(String aAttrName)
+	public Long getNumber(String aAttrName)
 	{
 		long lAttrVal = 0;
 		if(has(aAttrName))

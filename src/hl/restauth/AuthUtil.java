@@ -1,7 +1,7 @@
 package hl.restauth;
 
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import hl.restauth.auth.AuthConfig;
 
 public class AuthUtil {
